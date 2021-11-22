@@ -1,0 +1,225 @@
++*In[4]:*+
+[source, ipython3]
+----
+import pandas as pd
+import statsmodels.formula.api as smf
+salary = pd.read_csv('C:/Users/prate/Downloads/Assignment/SLR/Salary_Data.csv')
+salary.head()
+----
+
+
++*Out[4]:*+
+----
+[cols=",,",options="header",]
+|===
+| |YearsExperience |Salary
+|0 |1.1 |39343.0
+|1 |1.3 |46205.0
+|2 |1.5 |37731.0
+|3 |2.0 |43525.0
+|4 |2.2 |39891.0
+|===
+----
+
+
++*In[5]:*+
+[source, ipython3]
+----
+salary.info()
+----
+
+
++*Out[5]:*+
+----
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 30 entries, 0 to 29
+Data columns (total 2 columns):
+ #   Column           Non-Null Count  Dtype  
+---  ------           --------------  -----  
+ 0   YearsExperience  30 non-null     float64
+ 1   Salary           30 non-null     float64
+dtypes: float64(2)
+memory usage: 608.0 bytes
+----
+
+
++*In[7]:*+
+[source, ipython3]
+----
+salary.corr()
+----
+
+
++*Out[7]:*+
+----
+[cols=",,",options="header",]
+|===
+| |YearsExperience |Salary
+|YearsExperience |1.000000 |0.978242
+|Salary |0.978242 |1.000000
+|===
+----
+
+
++*In[8]:*+
+[source, ipython3]
+----
+import seaborn as sns
+sns.distplot(salary['Salary'])
+----
+
+
++*Out[8]:*+
+----
+C:\Users\prate\anaconda3\lib\site-packages\seaborn\distributions.py:2557: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).
+  warnings.warn(msg, FutureWarning)
+<AxesSubplot:xlabel='Salary', ylabel='Density'>
+![png](output_3_2.png)
+----
+
+
++*In[12]:*+
+[source, ipython3]
+----
+import seaborn as sns
+sns.distplot(salary['YearsExperience'])
+----
+
+
++*Out[12]:*+
+----
+C:\Users\prate\anaconda3\lib\site-packages\seaborn\distributions.py:2557: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).
+  warnings.warn(msg, FutureWarning)
+<AxesSubplot:xlabel='YearsExperience', ylabel='Density'>
+![png](output_4_2.png)
+----
+
+Fitting a Linear Regression Model
+
+
++*In[14]:*+
+[source, ipython3]
+----
+sns.regplot(x="Salary", y="YearsExperience", data=salary);
+----
+
+
++*Out[14]:*+
+----
+![png](output_6_0.png)
+----
+
+
++*In[15]:*+
+[source, ipython3]
+----
+import statsmodels.formula.api as smf
+----
+
+
++*In[16]:*+
+[source, ipython3]
+----
+model = smf.ols("Salary~YearsExperience",data = salary).fit()
+----
+
+
++*In[17]:*+
+[source, ipython3]
+----
+model.params
+----
+
+
++*Out[17]:*+
+----Intercept          25792.200199
+YearsExperience     9449.962321
+dtype: float64----
+
+
++*In[18]:*+
+[source, ipython3]
+----
+(model.tvalues, '\n', model.pvalues)
+----
+
+
++*Out[18]:*+
+----(Intercept          11.346940
+ YearsExperience    24.950094
+ dtype: float64,
+ '\n',
+ Intercept          5.511950e-12
+ YearsExperience    1.143068e-20
+ dtype: float64)----
+
+
++*In[19]:*+
+[source, ipython3]
+----
+(model.rsquared,model.rsquared_adj)
+----
+
+
++*Out[19]:*+
+----(0.9569566641435086, 0.9554194021486339)----
+
+
++*In[20]:*+
+[source, ipython3]
+----
+model.predict(salary)
+----
+
+
++*Out[20]:*+
+----0      36187.158752
+1      38077.151217
+2      39967.143681
+3      44692.124842
+4      46582.117306
+5      53197.090931
+6      54142.087163
+7      56032.079627
+8      56032.079627
+9      60757.060788
+10     62647.053252
+11     63592.049484
+12     63592.049484
+13     64537.045717
+14     68317.030645
+15     72097.015574
+16     73987.008038
+17     75877.000502
+18     81546.977895
+19     82491.974127
+20     90051.943985
+21     92886.932681
+22    100446.902538
+23    103281.891235
+24    108006.872395
+25    110841.861092
+26    115566.842252
+27    116511.838485
+28    123126.812110
+29    125016.804574
+dtype: float64----
+
+
++*In[21]:*+
+[source, ipython3]
+----
+#crosschecking manually
+25792.200+9449.962*2.2 #sorting time=2.2 yrars
+----
+
+
++*Out[21]:*+
+----46582.1164----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----

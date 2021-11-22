@@ -1,0 +1,244 @@
++*In[19]:*+
+[source, ipython3]
+----
+import pandas as pd
+import statsmodels.formula.api as smf
+Dt = pd.read_csv('C:/Users/prate/Downloads/Assignment/SLR/delivery_time.csv')
+Dt.head()
+----
+
+
++*Out[19]:*+
+----
+[cols=",,",options="header",]
+|===
+| |Delivery Time |Sorting Time
+|0 |21.00 |10
+|1 |13.50 |4
+|2 |19.75 |6
+|3 |24.00 |9
+|4 |29.00 |10
+|===
+----
+
+
++*In[2]:*+
+[source, ipython3]
+----
+Dt.info()
+----
+
+
++*Out[2]:*+
+----
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 21 entries, 0 to 20
+Data columns (total 2 columns):
+ #   Column         Non-Null Count  Dtype  
+---  ------         --------------  -----  
+ 0   Delivery Time  21 non-null     float64
+ 1   Sorting Time   21 non-null     int64  
+dtypes: float64(1), int64(1)
+memory usage: 464.0 bytes
+----
+
+
++*In[3]:*+
+[source, ipython3]
+----
+Dt.corr()
+----
+
+
++*Out[3]:*+
+----
+[cols=",,",options="header",]
+|===
+| |Delivery Time |Sorting Time
+|Delivery Time |1.000000 |0.825997
+|Sorting Time |0.825997 |1.000000
+|===
+----
+
+
++*In[4]:*+
+[source, ipython3]
+----
+import seaborn as sns
+sns.distplot(Dt['Delivery Time'])
+----
+
+
++*Out[4]:*+
+----
+C:\Users\prate\anaconda3\lib\site-packages\seaborn\distributions.py:2557: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).
+  warnings.warn(msg, FutureWarning)
+<AxesSubplot:xlabel='Delivery Time', ylabel='Density'>
+![png](output_3_2.png)
+----
+
+
++*In[5]:*+
+[source, ipython3]
+----
+import seaborn as sns
+sns.distplot(Dt['Sorting Time'])
+----
+
+
++*Out[5]:*+
+----
+C:\Users\prate\anaconda3\lib\site-packages\seaborn\distributions.py:2557: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).
+  warnings.warn(msg, FutureWarning)
+<AxesSubplot:xlabel='Sorting Time', ylabel='Density'>
+![png](output_4_2.png)
+----
+
+Fitting a Linear Regression Model
+
+
++*In[18]:*+
+[source, ipython3]
+----
+sns.regplot(x="dt", y="st", data=Dt);
+----
+
+
++*Out[18]:*+
+----
+![png](output_6_0.png)
+----
+
+
++*In[10]:*+
+[source, ipython3]
+----
+import statsmodels.formula.api as smf
+----
+
+
++*In[22]:*+
+[source, ipython3]
+----
+model = smf.ols("dt~st",data = Dt).fit()
+----
+
+
++*In[20]:*+
+[source, ipython3]
+----
+Dt.rename(columns={'Delivery Time':'dt','Sorting Time':'st'},inplace= True)
+----
+
+
++*In[21]:*+
+[source, ipython3]
+----
+Dt.head()
+----
+
+
++*Out[21]:*+
+----
+[cols=",,",options="header",]
+|===
+| |dt |st
+|0 |21.00 |10
+|1 |13.50 |4
+|2 |19.75 |6
+|3 |24.00 |9
+|4 |29.00 |10
+|===
+----
+
+
++*In[24]:*+
+[source, ipython3]
+----
+model.params
+----
+
+
++*Out[24]:*+
+----Intercept    6.582734
+st           1.649020
+dtype: float64----
+
+
++*In[25]:*+
+[source, ipython3]
+----
+(model.tvalues, '\n', model.pvalues)
+----
+
+
++*Out[25]:*+
+----(Intercept    3.823349
+ st           6.387447
+ dtype: float64,
+ '\n',
+ Intercept    0.001147
+ st           0.000004
+ dtype: float64)----
+
+
++*In[26]:*+
+[source, ipython3]
+----
+(model.rsquared,model.rsquared_adj)
+----
+
+
++*Out[26]:*+
+----(0.6822714748417231, 0.6655489208860244)----
+
+
++*In[32]:*+
+[source, ipython3]
+----
+model.predict(Dt)
+----
+
+
++*Out[32]:*+
+----0     23.072933
+1     13.178814
+2     16.476853
+3     21.423913
+4     23.072933
+5     16.476853
+6     18.125873
+7     11.529794
+8     23.072933
+9     21.423913
+10    19.774893
+11    13.178814
+12    18.125873
+13    11.529794
+14    11.529794
+15    13.178814
+16    16.476853
+17    18.125873
+18     9.880774
+19    18.125873
+20    14.827833
+dtype: float64----
+
+
++*In[33]:*+
+[source, ipython3]
+----
+#crosschecking manually
+6.58+1.64*9 #sorting time=10
+----
+
+
++*Out[33]:*+
+----21.34----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
